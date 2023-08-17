@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.request import Request
 from rest_framework.response import Response
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, Category
+from .serializers import ProductSerializer, CategorySerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 
@@ -43,3 +43,18 @@ def product_detail_view(request: Request, product_id: int):
     elif request.method == 'DELETE':
         product.delete()
         return Response(f'id ==> {product_id} deleted', status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'POST'])
+def create_category(request: Request):
+    if request.method == 'GET':
+        category = Category.objects.all()
+        ser_cat = CategorySerializer(category,many=True)
+        return Response(ser_cat.data, status.HTTP_200_OK)
+    if request.method == 'POST':
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        else:
+            return Response(status.HTTP_400_BAD_REQUEST)
