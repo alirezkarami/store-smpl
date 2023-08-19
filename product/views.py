@@ -4,10 +4,15 @@ from rest_framework.response import Response
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([SessionAuthentication, JWTTokenUserAuthentication])
+@permission_classes([IsAuthenticated])
 def all_product(request: Request):
     if request.method == 'GET':
         products = Product.objects.all()
@@ -23,6 +28,8 @@ def all_product(request: Request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([SessionAuthentication, JWTTokenUserAuthentication])
+@permission_classes([IsAuthenticated])
 def product_detail_view(request: Request, product_id: int):
     try:
         product = Product.objects.get(pk=product_id)
@@ -46,6 +53,8 @@ def product_detail_view(request: Request, product_id: int):
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([SessionAuthentication, JWTTokenUserAuthentication])
+@permission_classes([IsAuthenticated])
 def create_category(request: Request):
     if request.method == 'GET':
         category = Category.objects.all()
