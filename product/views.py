@@ -5,31 +5,13 @@ from rest_framework.response import Response
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 from rest_framework import status
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
-import django_filters.rest_framework
-from rest_framework.views import APIView
-from django_filters.rest_framework import DjangoFilterBackend
+
 
 
 class Pagin(PageNumberPagination):
     page_size = 2
-
-
-from rest_framework import generics
-
-
-# class RobotList(generics.ListCreateAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#     name = 'product-list'
-#
-#     filter_fields = (
-#         'name',
-#     )
 
 
 @api_view(['GET', 'POST'])
